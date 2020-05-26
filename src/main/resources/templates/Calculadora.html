@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Calcu</title>
+
+</head>
+<body bgcolor="#e9967a">
+<div align="justify">
+    <center><table border="2" cellspacing="2" cellpadding="5" >
+        <form name="miFormulario" >
+            <tr>
+                <td>
+                    <label>Número 1</label>
+                    <input type="text" id = "numA"name="numA" size="20">
+                    <br>
+                    <label>Número 2</label>
+                    <input type="text" id = "numB" name="numB" size="20">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <label>Resultado</label>
+                    <input type="text" name="resultado"size="20" disabled>
+                </td>
+            </tr>
+            <tr>
+                <a align="center" name= "OPERACION" id= "ope">
+                    <input type="button" value="+" onclick="sumar()">
+                    <input type="button" value="-" onclick="Restar()">
+                    <input type="button" value="*" onclick="Multiplicar()">
+                    <input type="button" value="/" onclick="Dividir()">
+                    <input type="button" value="^2" onclick="Cuadrado()"><p>Le hace cuadrado al Número1</p>
+                    <input type="button" value="%" onclick="Porcentaje()"></td>
+                <input type="submit" value="Borrar">
+                <td align="right">
+                </td>
+            </tr>
+        </form>
+    </table></center>
+</div>
+<p id="element">GetElementById</p>
+<script>
+    document.getElementById("element").innerHTML = "";
+
+    function Calcular() {
+
+
+        var url = "http://localhost:9090/ops";
+        var numA = document.getElementById('numA').value;
+        var numB = document.getElementById('numB').value;
+        var ope = document.getElementById('ope').value;
+
+        var http = new XMLHttpRequest();
+        //http.withCredentials = true;
+        http.responseType = "json";
+        http.open("POST", url, true);
+        http.onreadystatechange = function () {
+          /*  if (http.readyState == 4 && http.status == 200) {
+                alert(http.response.resultado)
+
+            } else*/ if (http.readyState == 4 && http.status == 200) {
+                document.getElementById("res").innerText = http.response.resultado;
+
+            }
+        }
+
+        var datos = new Object();
+        datos.numeroA = parseInt(numA);
+        datos.numeroB = parseInt(numB);
+        datos.op = ope;
+        http.setRequestHeader("Content-type", "application/json");
+        http.setRequestHeader("Access-Control-Allow-Origin", "true");
+        http.send(JSON.stringify(datos));
+
+    }
+
+    function sumar() {
+        var n1 = parseInt(document.miFormulario.numA.value);
+        var n2 = parseInt(document.miFormulario.numB.value);
+        document.miFormulario.resultado.value=n1+n2;
+    }
+    function Restar() {
+        var n1 = parseInt(document.miFormulario.numA.value);
+        var n2 = parseInt(document.miFormulario.numB.value);
+        document.miFormulario.resultado.value=n1-n2;
+    }
+    function Multiplicar() {
+        var n1 = parseInt(document.miFormulario.numA.value);
+        var n2 = parseInt(document.miFormulario.numB.value);
+        document.miFormulario.resultado.value=n1*n2;
+    }
+    function Dividir() {
+        var n1 = parseInt(document.miFormulario.numA.value);
+        var n2 = parseInt(document.miFormulario.numB.value);
+        document.miFormulario.resultado.value=n1/n2;
+    }
+    function Cuadrado() {
+        var n1 = parseInt(document.miFormulario.numA.value);
+        var n2 = parseInt(document.miFormulario.numB.value);
+
+       document.miFormulario.resultado.value=n1*n1;
+
+    }
+    function Porcentaje() {
+        var n1 = parseInt(document.miFormulario.numA.value);
+        var n2 = parseInt(document.miFormulario.numB.value);
+        document.miFormulario.resultado.value=n1*100/n2;
+    }
+</script>
+</body>
+</html>
